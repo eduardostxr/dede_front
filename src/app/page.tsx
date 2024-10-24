@@ -4,15 +4,32 @@ import { ItemCarros } from "@/components/ItemCartas";
 import { CartaI } from "@/utils/types/cartas";
 import { useEffect, useState } from "react";
 import { Toaster } from 'sonner'
+import { useClienteStore } from "@/context/cliente";
 
 export default function Home() {
   const [cartas, setCartas] = useState<CartaI[]>([])
+  const { logaCliente } = useClienteStore()
 
   useEffect(() => {
+
+    async function buscaCliente(idCliente: string) {
+      console.log(idCliente)
+      const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/clientes/${idCliente}`)
+      if (response.status == 200) {
+        const dados = await response.json()
+        logaCliente(dados)
+        
+      }
+    }
+
+    if (localStorage.getItem("client_key")) {
+      const idClienteLocal = localStorage.getItem("client_key") as string
+      buscaCliente(idClienteLocal)
+    }
+
     async function buscaDados() {
       const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/cartas`)
       const dados = await response.json()
-      // console.log(dados)
       setCartas(dados)
     }
     buscaDados()
