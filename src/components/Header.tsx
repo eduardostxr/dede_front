@@ -11,8 +11,8 @@ export function Header() {
   function sairCliente() {
     deslogaCliente()
     // remove de localStorage o id do cliente logado (se ele indicou salvar no login)
-    if (localStorage.getItem("client_key")) {
-      localStorage.removeItem("client_key")
+    if (localStorage.getItem("cliente_key")) {
+      localStorage.removeItem("cliente_key")
     }
     router.push("/login")
   }

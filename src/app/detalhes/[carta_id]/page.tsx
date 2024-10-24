@@ -1,14 +1,14 @@
 "use client"
 import { CartaI } from "@/utils/types/cartas";
-import { FotoI } from "@/utils/types/fotos";
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react";
+import { useClienteStore } from "@/context/cliente";
 
 export default function Detalhes() {
   const params = useParams()
-
+  const { cliente } = useClienteStore();
   const [carta, setCarta] = useState<CartaI>()
-  // const [fotos, setFotos] = useState<FotoI[]>([])
+  const [proposta, setProposta] = useState<string>(""); // estado para armazenar a proposta
 
   useEffect(() => {
     async function buscaDados() {
@@ -18,23 +18,40 @@ export default function Detalhes() {
       setCarta(dados)
     }
     buscaDados()
+  }, [params.carta_id])
 
-    // async function buscaFotos() {
-    //   const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/fotos/${params.carta_id}`)
-    //   const dados = await response.json()
-    //   console.log(dados)
-    //   setFotos(dados)
-    // }
-    // buscaFotos()
-  }, [])
+  const enviarProposta = async () => {
+    if (!cliente || !cliente.id) {
+      alert("Você precisa estar logado para fazer uma proposta.");
+      return;
+    }
 
-  // const listaFotos = fotos.map(foto => (
-  //   <div>
-  //     <img className="h-auto max-w-full rounded-lg" 
-  //          src={`data:image/jpg;base64, ${foto.codigoFoto}`}
-  //          alt={foto.descricao} />
-  //   </div>
-  // ))
+    const propostaData = {
+      cartaId: carta?.id,
+      clienteId: cliente.id,
+      descricao: proposta,
+    };
+
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/propostas`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(propostaData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Erro ao enviar a proposta');
+      }
+
+      const resultado = await response.json();
+      console.log("Proposta enviada:", resultado);
+      setProposta("");
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <>
@@ -57,13 +74,30 @@ export default function Detalhes() {
           <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
             {carta?.descricao}
           </p>
+
+          {cliente && cliente.id ? (
+            <>
+              <input 
+                type="text" 
+                value={proposta} 
+                onChange={(e) => setProposta(e.target.value)} 
+                placeholder="Faça sua proposta..." 
+                className="border rounded p-2 mb-2"
+              />
+              <button 
+                onClick={enviarProposta}
+                className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded"
+              >
+                Enviar Proposta
+              </button>
+            </>
+          ) : (
+            <h5 className="mb-3 text-xl text-gray-700 dark:text-white">
+              *Para fazer uma proposta, faça login.*
+            </h5>
+          )}
         </div>
       </section>
-{/* 
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-        {listaFotos}
-      </div> */}
-
     </>
-  )
+  );
 }
