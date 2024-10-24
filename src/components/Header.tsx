@@ -28,28 +28,29 @@ export function Header() {
         </Link>
         <div className="flex items-center space-x-6 rtl:space-x-reverse">
 
-        {cliente.id ?
-        <>
-          <span className="text-gray-500 dark:text-white hover:underline">
-            {cliente.nome}
-          </span>
-          <span className="cursor-pointer font-bold text-blue-600 dark:text-blue-500 hover:underline"
-            onClick={sairCliente}>
-            Sair
-          </span>
-        </>
-        :
-        <>
-          <span className="text-gray-500 dark:text-white hover:underline">
-            (identifique-se)
-          </span>
-          <Link href="/login" className="font-bold text-blue-600 dark:text-blue-500 hover:underline">
-            Entrar
-          </Link>
-        </>
-        
-
-        }
+          {cliente.id ?
+            <>
+              <span className="text-gray-500 dark:text-white hover:underline">
+                Olá, {cliente.nome}
+              </span>
+              <Link href="/propostas" className="font-semibold text-white hover:underline hover:text-colorAmareloDourado">
+                Minhas Propostas
+              </Link>
+              <span className="cursor-pointer font-bold text-blue-600 dark:text-blue-500 hover:underline"
+                onClick={sairCliente}>
+                Sair
+              </span>
+            </>
+            :
+            <>
+              <span className="text-gray-500 dark:text-white hover:underline">
+                (identifique-se)
+              </span>
+              <Link href="/login" className="font-bold text-blue-600 dark:text-blue-500 hover:underline">
+                Entrar
+              </Link>
+            </>
+          }
         </div>
       </div>
     </nav>
