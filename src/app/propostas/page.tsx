@@ -17,8 +17,7 @@ export default function Propostas() {
     buscaDados()
   }, [])
 
-  // para retornar apenas a data do campo no banco de dados
-  // 2024-10-10T22:46:27.227Z => 10/10/2024
+
   function dataDMA(data: string) {
     const ano = data.substring(0, 4)
     const mes = data.substring(5, 7)
@@ -52,8 +51,8 @@ export default function Propostas() {
 
   return (
     <section className="max-w-7xl mx-auto">
-      <h1 className="mb-6 mt-4 text-2xl font-extrabold leading-none tracking-tight text-colorUvaEscura md:text-4xl lg:text-5xl">
-        Listagem de Minhas Propostas</h1>
+      {/* <h1 className="mb-6 mt-4 text-2xl font-extrabold leading-none tracking-tight text-colorUvaEscura md:text-4xl lg:text-5xl">
+        Listagem de Minhas Propostas</h1> */}
 
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
